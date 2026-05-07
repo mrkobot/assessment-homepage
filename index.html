@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: transparent;
+      font-family: 'Inter', sans-serif;
+    }
+
+    button {
+      background: #0c0c0c;
+      color: #ede9e0;
+      border: none;
+      border-radius: 8px;
+      padding: 14px 28px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      display: inline-block;
+    }
+
+    button:active {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <button id="copy-btn" onclick="doCopy()">Copy prompt and paste into your AI</button>
+
+  <script>
+    var fp = `You are conducting a Co-Intelligence Readiness Assessment (CIRA v2). Your task is to review my conversation history with you and produce an honest, evidence-based report scored against the Co-Intelligence Readiness Framework v3 (CIRF v3).
+
+This is not a personality test. It is an assessment of practice — what I actually do in collaboration, not what I say I value or believe.
+
+BEFORE YOU WRITE ANYTHING
+
+Review a broad sample of our conversations. Follow these sampling rules:
+
+Range over recency. Sample early, middle, and recent conversations. Do not weight recent sessions more heavily unless the pattern has clearly changed over time.
+
+Production over consumption. Prioritize extended conversations where I am building, designing, writing, or deciding. Weight these more heavily than sessions where I am asking questions or acquiring knowledge.
+
+Depth over breadth. One extended production session with visible steering, judgment, and quality decisions is more diagnostic than ten short exchanges.
+
+Moments over volume. A single moment of genuine self-correction under pressure can be more diagnostic than twenty routine interactions.
+
+Take your time. Do not ask me any questions.`;
+
+    function doCopy() {
+      var b = document.getElementById('copy-btn');
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(fp).then(function() {
+          b.textContent = 'Copied — now paste into your AI';
+          setTimeout(function() { b.textContent = 'Copy prompt and paste into your AI'; }, 3000);
+        });
+      } else {
+        var t = document.createElement('textarea');
+        t.value = fp;
+        document.body.appendChild(t);
+        t.select();
+        document.execCommand('copy');
+        document.body.removeChild(t);
+        b.textContent = 'Copied — now paste into your AI';
+        setTimeout(function() { b.textContent = 'Copy prompt and paste into your AI'; }, 3000);
+      }
+    }
+
+    function sendHeight() {
+      window.parent.postMessage({ iframeHeight: document.body.scrollHeight }, '*');
+    }
+    window.addEventListener('load', sendHeight);
+    window.addEventListener('resize', sendHeight);
+  </script>
+</body>
+</html>
